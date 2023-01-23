@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { WeatherData } from './models/weather.model';
+import { WeatherConditionTypes } from './models/weatherConditions.enum';
 import { WeatherService } from './services/weather.service';
 
 @Component({
@@ -7,34 +9,44 @@ import { WeatherService } from './services/weather.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  // WeatherData?:WeatherData
+  public weatherData : WeatherData | any;
+  public WeatherConditionTypes = WeatherConditionTypes;
+  public condition : string = '';
   cityName: string = 'Ohrid'
   constructor(private weatherService: WeatherService) {
 
 
   }
   ngOnInit(): void {
-    // this.weatherService.getWeatherData('Ohrid')
-    // .subscribe({
-    //   next: (response)=>{
-    //     console.log(response)
-    //   }
-    // })
-  
+
+    this.getWeatherData(this.cityName)
   }
   onSubmit(){
-    this.getWeatherDate(this.cityName)
-    this.cityName=''
+    this.getWeatherData(this.cityName)
+    //this.cityName=''
   }
 
-private getWeatherDate(cityName:string){
-    // this.weatherService.getWeatherData('Ohrid')
-    // .subscribe({
-    //   next: (response)=>{
-    //     console.log(response)
-    //   }
-    // })
+public getWeatherData(cityName:string){
+    this.weatherService.getWeatherData(cityName)
+    .subscribe({
+      next: (response:any)=>{
+        this.weatherData=response;
+        this.setupWeatherData();
+        console.log(this.weatherData)
+        console.log(this.weatherData?.weather[0].main)
+      }
+    })
 }
+
+setupWeatherData() {
+  this.weatherData.main.temp_min = this.weatherData?.main.temp_min - 273.15;
+  this.weatherData.main.temp_max = this.weatherData?.main.temp_max - 273.15;
+  this.weatherData.main.temp = this.weatherData?.main.temp - 273.15;
+  this.condition = this.weatherData?.weather[0].main;
+}
+
+
+
 
 
 }
