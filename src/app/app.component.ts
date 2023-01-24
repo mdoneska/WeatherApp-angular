@@ -12,13 +12,14 @@ export class AppComponent implements OnInit {
   public weatherData : WeatherData | any;
   public WeatherConditionTypes = WeatherConditionTypes;
   public condition : string = '';
+  public cities : any[] = [];
   cityName: string = 'Ohrid'
   constructor(private weatherService: WeatherService) {
 
 
   }
   ngOnInit(): void {
-
+    this.getCities();
     this.getWeatherData(this.cityName)
   }
   onSubmit(){
@@ -36,6 +37,12 @@ public getWeatherData(cityName:string){
         console.log(this.weatherData?.weather[0].main)
       }
     })
+}
+
+public getCities() {
+  this.weatherService.getCities().subscribe((cities) => {
+    this.cities = cities.concat.apply([], cities);
+  })
 }
 
 setupWeatherData() {

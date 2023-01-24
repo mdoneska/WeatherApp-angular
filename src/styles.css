@@ -64,3 +64,5 @@ border-style: none;
 /* .temp-details{
     margin-top: 70px;
 } */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
